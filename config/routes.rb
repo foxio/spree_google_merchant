@@ -1,5 +1,7 @@
 Spree::Core::Engine.routes.append do
-  resources :products do 
+  get '/google_merchant', to: 'products#google_merchant'
+
+  resources :products do
     get :google_merchant
   end
 
