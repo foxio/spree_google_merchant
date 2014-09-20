@@ -3,8 +3,9 @@ module Spree
     respond_to :rss
 
     def index
-      @products = Spree::Product.active.includes(:master => [:images])
-      respond_with(@products)
+      @variants = Spree::Variant.active.includes(:product)
+      # @variants = [Spree::Variant.find(27)]
+      respond_with(@variants)
     end
   end
 end
