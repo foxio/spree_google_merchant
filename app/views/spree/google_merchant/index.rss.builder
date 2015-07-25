@@ -7,7 +7,7 @@ xml.rss "version" => "2.0", "xmlns:g" => "http://base.google.com/ns/1.0" do
 
     production_domain = Spree::GoogleMerchant::Config[:production_domain]
     xml.link production_domain
-    @variants.first(10).each do |x|
+    @variants.each do |x|
       next if (x.is_master? && x.product.variants.count > 1)
       xml.item do
         xml.id x.id.to_s
@@ -19,9 +19,9 @@ xml.rss "version" => "2.0", "xmlns:g" => "http://base.google.com/ns/1.0" do
         xml.tag! "g:price", x.price unless x.price <= 0.0
         xml.tag! "g:condition", "new"
         xml.tag! "g:availability", "in stock"
-        xml.tag! "g:image_link", ( x.product.images.first.attachment.url(:product)) unless x.product.images.empty?
+        xml.tag! "g:image_link", ( x.product.images.first.attachment.url(:product)).gsub(/([^:])\/\//, '\1/') unless x.product.images.empty?
         (x.images[1..10] || []).each do |image|
-          xml.tag! "g:additional_image_link",  image.attachment.url(:product)
+          xml.tag! "g:additional_image_link",  image.attachment.url(:product).gsub(/([^:])\/\//, '\1/')
         end
         xml.tag! "g:shipping_weight", x.weight unless x.weight <= 0
         xml.tag! "g:brand", x.product.property("brand") if x.product.property("brand").present?
